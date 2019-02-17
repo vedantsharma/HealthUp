@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<link>
+    <meta charset="UTF-8">
+    <title>HealthUp</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+    <form>
+        <div class="container">
+            <h3> Input Text:</h3>
+                <div class="form-group">
+                    <label for="input">The Digitized text here</label>
+                    <textarea id="input" class="form-control" rows="12"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="type">Select Type</label>
+                    <select class="form-control" id="type" onchange="ER(this.value)">
+                        <option value="">select the criteria</option>
+                        <option value="PERSON">Person</option>
+                        <option value="CITY">City</option>
+                        <option value="STATE_OR_PROVINCE">state</option>
+                        <option value="COUNTRY">Country</option>
+                        <option value="EMAIL">Email</option>
+                        <option value="TITLE">Title</option>
+                        <option value="DURATION">Duration</option>
+                        <option value="CAUSE_OF_DEATH">Cause of Death</option>
+                        <option value="MISC">MISC</option>
+                    </select>
+                </div>
+
+            <h3> Output Text:</h3>
+                <div class="form-group" id="result"></div>
+        </div>
+    </form>
+
+    <script type="text/javascript">
+        function ER(type)
+        {
+            var input = $("#input").val();  //anything in text area can be retrieved
+
+            $.ajax({
+
+                type: 'POST',
+                url: "http://localhost8080/api/v1/ner?type="+type,
+                contentType: 'text/plain; charset=utf-8',
+                data: input,
+                success: function(response)
+                {
+                    var result = "";
+                    $.each(response,function (index,value)
+                    {
+                        result = result + "<span class='badge badge-success'>"+ value + "</span>&nbsp;"
+                    })
+                    $("#result").html(result);
+                }
+
+            })
+            
+        }
+    </script>
+</body>
+</html>
